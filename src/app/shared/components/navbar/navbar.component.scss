@@ -1,0 +1,29 @@
+.spacer {
+    flex: 1 1 auto;
+}
+
+.sidenav-container {
+    height: 50%;
+}
+
+.sidenav {
+    width: 200px;
+}
+
+mat-toolbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+}
+
+mat-sidenav-content {
+    margin-top: 64px;
+    /* Adjust based on the height of your toolbar */
+}
+
+.content {
+    padding-bottom: 60px;
+    /* Adjust this value based on the height of your footer */
+}
