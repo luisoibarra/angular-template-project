@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { ILogin } from '../../interfaces/login';
 import { IUser } from '../../interfaces/user';
 import { StorageService } from '../../services/storage.service';
+import { HashService } from '../../../project/shared/hash/services/hash.service';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +24,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private storageService: StorageService
+    private storageService: StorageService,
+    private hashService: HashService
   ) {}
 
   ngOnInit() {
@@ -37,18 +39,23 @@ export class LoginComponent implements OnInit, OnDestroy {
     // this.AuthUserSub.unsubscribe();
   }
 
-  login() {
+  async login() {
     if (!this.loginForm.valid) {
       return;
     }
-    this.authService.login(this.loginForm.value).subscribe({
-      next: (userData) => {
+
+    var loginData:ILogin =
+    {
+      email : String(this.loginForm.value.email),
+      password : await this.hashService.generateHash(String(this.loginForm.value.password))
+    }
+    this.authService.login(loginData).then(userData =>
+      {
         this.router.navigate(['home']);
-      },
-      error: (err) => {
+      })
+      .catch(err =>{
         this.errorMessage = err;
-      },
-    });
+      })
   }
 
   protected readonly console = console;

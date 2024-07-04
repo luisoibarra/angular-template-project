@@ -4,11 +4,12 @@ import { AuthService } from '../account/services/auth.service';
 import { map, take } from 'rxjs';
 import { StorageService } from '../account/services/storage.service';
 
-export const authGuard: CanActivateFn = (route, state) => {
+export const authGuard: CanActivateFn = async (route, state) => {
   const router = inject(Router);
-  const userData = inject(StorageService);
-  const user = userData.getUser();
-  if (user) {
+  // const userData = inject(StorageService);
+  const authService = inject(AuthService);
+  var userData =await authService.autoLogin()
+  if (userData !=null ) {
     return true;
     return router.navigate(['forbidden']);
   }

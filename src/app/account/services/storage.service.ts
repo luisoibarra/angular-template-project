@@ -3,6 +3,7 @@ import { IUser } from '../interfaces/user';
 
 const USER_KEY = 'auth-user';
 const TOKEN_KEY = 'auth-token';
+const REFRESH_TOKEN_KEY = 'auth-refresh-token'
 
 @Injectable({
   providedIn: 'root',
@@ -27,13 +28,22 @@ export class StorageService {
 
     return null;
   }
-  public saveToken(token: string): void {
+  public async saveToken(token: string):Promise<any>  {
     window.sessionStorage.removeItem(TOKEN_KEY);
     window.sessionStorage.setItem(TOKEN_KEY, token);
   }
 
-  public getToken() {
+  public  getToken() {
     const token = window.sessionStorage.getItem(TOKEN_KEY);
+    return token;
+  }
+  public async saveRefreshToken(token: string): Promise<any> {
+    window.sessionStorage.removeItem(REFRESH_TOKEN_KEY);
+    window.sessionStorage.setItem(REFRESH_TOKEN_KEY, token);
+  }
+
+  public getRefreshToken() {
+    const token = window.sessionStorage.getItem(REFRESH_TOKEN_KEY);
     return token;
   }
 

@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { CustomValidators } from '../../../utils/custom-validators';
 import { AuthService } from '../../services/auth.service';
 import { BehaviorSubject, Subject, tap } from 'rxjs';
+import { HashService } from '../../../project/shared/hash/services/hash.service';
+import { IUserRegistration } from '../../interfaces/userRegistration';
 
 @Component({
   selector: 'app-register',
@@ -35,20 +37,31 @@ export class RegisterComponent implements OnInit {
 
   errorMessage!: string;
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(private router: Router, private authService: AuthService, private hashService: HashService) {}
 
   ngOnInit(): void {}
 
-  register() {
+  async register() {
     if (!this.registerForm.valid) {
       return;
     }
-    this.authService.register(this.registerForm.value).subscribe({
-      next: () => {
+    var registerData:IUserRegistration =
+    {
+      email: String(this.registerForm.value.email),
+      userName: String(this.registerForm.value.userName),
+      firstName: String(this.registerForm.value.firstName),
+      lastName: String(this.registerForm.value.lastName),
+      password: await this.hashService.generateHash(String(this.registerForm.value.password))
+    }
+
+    this.authService.register(registerData).subscribe({
+      next: (user) => {
+        console.log(user);
         this.router.navigate(['account/login']);
       },
       error: (err) => {
-        this.errorMessage = err.error;
+        this.errorMessage = err.error.message;
+        console.log(err.error);
       },
     });
   }

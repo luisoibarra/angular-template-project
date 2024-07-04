@@ -10,6 +10,7 @@ import { MatFormFieldModule} from '@angular/material/form-field'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { HashService } from '../project/shared/hash/services/hash.service';
 
 
 
@@ -28,6 +29,6 @@ import { MatIconModule } from '@angular/material/icon';
     MatIconModule,
 
   ],
-  providers: [],
+  providers: [HashService],
 })
 export class AccountModule {}
